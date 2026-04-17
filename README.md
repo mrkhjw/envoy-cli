@@ -24,6 +24,9 @@ envoy-cli pull --env staging --output .env.staging
 
 # Diff two environment files
 envoy-cli diff .env .env.production
+
+# Validate a .env file for syntax errors
+envoy-cli validate --file .env
 ```
 
 ### Example
