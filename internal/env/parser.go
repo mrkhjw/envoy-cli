@@ -34,7 +34,7 @@ func ParseFile(path string) ([]Entry, error) {
 			continue
 		}
 		key := strings.TrimSpace(parts[0])
-		value := strings.Trim(strings.TrimSpace(parts[1]), `"`)
+		value := stripQuotes(strings.TrimSpace(parts[1]))
 		entries = append(entries, Entry{
 			Key:    key,
 			Value:  value,
@@ -45,6 +45,17 @@ func ParseFile(path string) ([]Entry, error) {
 		return nil, fmt.Errorf("scan %s: %w", path, err)
 	}
 	return entries, nil
+}
+
+// stripQuotes removes surrounding double or single quotes from a value.
+func stripQuotes(s string) string {
+	if len(s) >= 2 {
+		if (s[0] == '"' && s[len(s)-1] == '"') ||
+			(s[0] == '\'' && s[len(s)-1] == '\'') {
+			return s[1 : len(s)-1]
+		}
+	}
+	return s
 }
 
 // isSecret returns true if the key looks like it holds sensitive data.
