@@ -47,3 +47,14 @@ func TestValidateFile_NotFound(t *testing.T) {
 		t.Error("expected error for missing file")
 	}
 }
+
+func TestValidateFile_EmptyFile(t *testing.T) {
+	path := writeTempEnvForValidate(t, "")
+	result, err := ValidateFile(path)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if !result.Valid() {
+		t.Errorf("expected empty file to be valid, got: %s", result.Summary())
+	}
+}
