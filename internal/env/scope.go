@@ -24,6 +24,15 @@ func (r ScopeResult) Format(mask bool) string {
 	return out
 }
 
+// Keys returns only the key names from the scoped entries.
+func (r ScopeResult) Keys() []string {
+	keys := make([]string, len(r.Entries))
+	for i, e := range r.Entries {
+		keys[i] = e.Key
+	}
+	return keys
+}
+
 // ScopeOptions controls how Scope filters entries.
 type ScopeOptions struct {
 	// Prefix is the environment prefix, e.g. "PROD", "DEV".
