@@ -51,13 +51,20 @@ var loadSnapshotCmd = &cobra.Command{
 
 		fmt.Printf("Snapshot from %s (taken %s):\n", snap.Source, snap.Timestamp.Format("2006-01-02 15:04:05"))
 		for k, v := range snap.Entries {
-			if env.MaskLine(k+"="+v) != k+"="+v {
-				v = "***"
-			}
-			fmt.Printf("  %s=%s\n", k, v)
+			fmt.Printf("  %s\n", maskEntry(k, v))
 		}
 		return nil
 	},
+}
+
+// maskEntry returns a formatted "key=value" string, masking the value if it
+// matches a sensitive pattern (e.g. passwords, tokens, secrets).
+func maskEntry(k, v string) string {
+	line := k + "=" + v
+	if env.MaskLine(line) != line {
+		return k + "=***"
+	}
+	return line
 }
 
 func init() {
