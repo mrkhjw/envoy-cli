@@ -44,6 +44,18 @@ func TestMask_RevealPrefix(t *testing.T) {
 	}
 }
 
+func TestMask_RevealPrefixLongerThanValue(t *testing.T) {
+	shortEntries := []Entry{
+		{Key: "API_KEY", Value: "ab"},
+	}
+	result := Mask(shortEntries, MaskOptions{Placeholder: "***", RevealPrefix: 5})
+	for _, e := range result.Entries {
+		if e.Key == "API_KEY" && e.Value == "***" {
+			t.Errorf("expected partial or full reveal when RevealPrefix exceeds value length, got %s", e.Value)
+		}
+	}
+}
+
 func TestMask_NonSecretsUnchanged(t *testing.T) {
 	result := Mask(baseMaskEntries, MaskOptions{})
 	for _, e := range result.Entries {
