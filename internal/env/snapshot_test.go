@@ -64,6 +64,13 @@ func TestTakeSnapshot_MissingSource(t *testing.T) {
 	}
 }
 
+func TestLoadSnapshot_MissingFile(t *testing.T) {
+	_, err := LoadSnapshot("/nonexistent/snap.json")
+	if err == nil {
+		t.Error("expected error for missing snapshot file")
+	}
+}
+
 func TestSnapshotResult_Format(t *testing.T) {
 	src := writeTempSnapshotEnv(t, "KEY=val\n")
 	dest := filepath.Join(t.TempDir(), "snap.json")
