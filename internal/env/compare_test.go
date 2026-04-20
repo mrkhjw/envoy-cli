@@ -72,3 +72,14 @@ func TestCompare_Summary_MasksSecrets(t *testing.T) {
 		t.Error("expected masked placeholder in summary")
 	}
 }
+
+func TestCompare_EmptyMaps(t *testing.T) {
+	env1 := map[string]string{}
+	env2 := map[string]string{}
+
+	r := Compare("a.env", "b.env", env1, env2)
+
+	if len(r.InBoth) != 0 || len(r.Conflict) != 0 || len(r.OnlyIn1) != 0 || len(r.OnlyIn2) != 0 {
+		t.Error("expected all result maps to be empty for two empty inputs")
+	}
+}
