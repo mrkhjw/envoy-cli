@@ -67,6 +67,14 @@ func TestLint_SkipsComments(t *testing.T) {
 	}
 }
 
+func TestLint_SkipsBlankLines(t *testing.T) {
+	lines := []string{"", "   ", "APP=ok"}
+	result := Lint(lines)
+	if len(result.Issues) != 0 {
+		t.Fatalf("expected no issues for blank lines, got %d", len(result.Issues))
+	}
+}
+
 func TestLintResult_Format_NoIssues(t *testing.T) {
 	r := &LintResult{}
 	if r.Format() != "No lint issues found." {
