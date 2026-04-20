@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/envoy-cli/envoy/internal/env"
 	"github.com/spf13/cobra"
@@ -26,6 +25,13 @@ var transformCmd = &cobra.Command{
 		entries, err := env.ParseFile(args[0])
 		if err != nil {
 			return fmt.Errorf("failed to read file: %w", err)
+		}
+
+		if transformUpperKeys && transformLowerKeys {
+			return fmt.Errorf("--upper-keys and --lower-keys are mutually exclusive")
+		}
+		if transformUpperValues && transformLowerValues {
+			return fmt.Errorf("--upper-values and --lower-values are mutually exclusive")
 		}
 
 		opts := env.TransformOpts{
@@ -52,9 +58,5 @@ func init() {
 	transformCmd.Flags().StringSliceVar(&transformKeys, "keys", nil, "Limit transformations to specific keys")
 	transformCmd.Flags().BoolVar(&transformMask, "mask", false, "Mask secret values in output")
 
-	if err := rootCmd.GenBashCompletion(os.Stdout); err == nil {
-		rootCmd.AddCommand(transformCmd)
-	} else {
-		rootCmd.AddCommand(transformCmd)
-	}
+	rootCmd.AddCommand(transformCmd)
 }
