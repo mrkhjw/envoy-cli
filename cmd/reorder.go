@@ -47,6 +47,7 @@ var reorderCmd = &cobra.Command{
 			for _, e := range res.Entries {
 				fmt.Printf("%s=%s\n", e.Key, e.Value)
 			}
+			return nil
 		}
 		fmt.Println(res.Format())
 		return nil
