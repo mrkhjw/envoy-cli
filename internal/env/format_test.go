@@ -67,3 +67,17 @@ func TestFormat_String(t *testing.T) {
 		t.Error("expected newline-separated output")
 	}
 }
+
+func TestFormat_EmptyEntries(t *testing.T) {
+	res := Format([]Entry{}, FormatOptions{})
+	if res.Total != 0 {
+		t.Fatalf("expected 0 lines, got %d", res.Total)
+	}
+	if len(res.Lines) != 0 {
+		t.Errorf("expected empty lines slice, got %v", res.Lines)
+	}
+	out := res.String()
+	if out != "" {
+		t.Errorf("expected empty string output, got %q", out)
+	}
+}
