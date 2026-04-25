@@ -2,6 +2,7 @@ package env
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 )
 
@@ -24,8 +25,14 @@ func (r SummarizeResult) Format(maskSecrets bool) string {
 	sb.WriteString(fmt.Sprintf("Comments     : %d\n", r.Comments))
 	if len(r.Groups) > 0 {
 		sb.WriteString("Groups:\n")
-		for prefix, count := range r.Groups {
-			sb.WriteString(fmt.Sprintf("  %-20s %d\n", prefix+"_*", count))
+		// Sort group prefixes for deterministic output
+		prefixes := make([]string, 0, len(r.Groups))
+		for prefix := range r.Groups {
+			prefixes = append(prefixes, prefix)
+		}
+		sort.Strings(prefixes)
+		for _, prefix := range prefixes {
+			sb.WriteString(fmt.Sprintf("  %-20s %d\n", prefix+"_*", r.Groups[prefix]))
 		}
 	}
 	if len(r.Entries) > 0 {
