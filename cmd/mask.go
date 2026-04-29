@@ -25,6 +25,10 @@ var maskCmd = &cobra.Command{
 			return err
 		}
 
+		if maskRevealPrefix < 0 {
+			return fmt.Errorf("--reveal-prefix must be a non-negative integer")
+		}
+
 		opts := env.MaskOptions{
 			Placeholder:  maskPlaceholder,
 			RevealPrefix: maskRevealPrefix,
